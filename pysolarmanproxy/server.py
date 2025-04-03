@@ -60,7 +60,6 @@ def run(
     solarman = PySolarmanV5(
         solarman_address, solarman_loggerserial, port=solarman_port, mb_slave_id=slave_id, verbose=verbose, auto_reconnect=True, logger=logger
     )
-    print("here")
     with ModbusProxyServer((server_address, server_port), ModbusProxyHandler, solarman) as server:
         try:
             logger.info("starting server")
