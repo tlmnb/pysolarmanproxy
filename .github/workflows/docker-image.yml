@@ -11,4 +11,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag pysolarmanproxy:${{github.ref_name}}
+      run: docker build --tag pysolarmanproxy:${{github.ref_name}} --build-arg PYSOLARMAN_VERSION=${{github.ref_name}} .
