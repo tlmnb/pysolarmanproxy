@@ -10,5 +10,5 @@ setup(
         "pysolarmanv5==3.0.5",
         "click==8.1.8"
     ],
-    entry_points={"console_scripts": ["pysolarmanproxy = pysolarmanproxy.server:run"]}
+    entry_points={"console_scripts": ["pysolarmanproxy = pysolarmanproxy.server:main"]}
 )

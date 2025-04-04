@@ -67,6 +67,8 @@ def run(
         finally:
             server.server_close()
 
+def main():
+    run(auto_envvar_prefix="SOLARMANPROXY")
 
 if __name__ == "__main__":
-    run()
+    main()
