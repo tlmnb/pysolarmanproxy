@@ -45,9 +45,9 @@ class ModbusProxyServer(socketserver.TCPServer):
 @click.command()
 @click.option("--server_address", required=True, type=str)
 @click.option("--server_port", required=True, type=int)
-@click.option("--solarman_address", required=True, type=str)
-@click.option("--solarman_port", required=True, type=int)
-@click.option("--solarman_loggerserial", required=True, type=int)
+@click.option("--address", required=True, type=str)
+@click.option("--port", required=True, type=int)
+@click.option("--loggerserial", required=True, type=int)
 @click.option("--slave_id", required=True, type=int)
 @click.option("--verbose", is_flag=True, default=False, type=bool)
 def run(
@@ -71,7 +71,7 @@ def run(
             server.server_close()
 
 def main():
-    run(auto_envvar_prefix="SOLARMANPROXY")
+    run(auto_envvar_prefix="SOLARMAN")
 
 if __name__ == "__main__":
     main()
