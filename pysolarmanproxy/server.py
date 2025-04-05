@@ -15,9 +15,11 @@ class ModbusProxyHandler(socketserver.StreamRequestHandler):
         super().__init__(*args, **kwargs)
 
     def handle(self) -> None:
-        request: bytes = self.rfile.read()
+        logger.debug(f"client connected: {self.client_address[0]}:{self.client_address[1]}")
+        request: bytes = self.request.recv(1024)
+        logger.debug("request: {data}".format(data=" ".join(f"{byte:02X}" for byte in request)))
         response = self.server.solarman.send_raw_modbus_frame(request)
-        self.wfile.write(request)
+        self.wfile.write(response)
 
 
 class ModbusProxyServer(socketserver.TCPServer):
@@ -57,6 +59,7 @@ def run(
     slave_id: int,
     verbose: bool,
 ):
+    logger.setLevel(logging.DEBUG if verbose else logging.INFO)
     solarman = PySolarmanV5(
         solarman_address, solarman_loggerserial, port=solarman_port, mb_slave_id=slave_id, verbose=verbose, auto_reconnect=True, logger=logger
     )
