@@ -53,15 +53,15 @@ class ModbusProxyServer(socketserver.TCPServer):
 def run(
     server_address: str,
     server_port: int,
-    solarman_address: str,
-    solarman_port: int,
-    solarman_loggerserial: int,
+    address: str,
+    port: int,
+    loggerserial: int,
     slave_id: int,
     verbose: bool,
 ):
     logger.setLevel(logging.DEBUG if verbose else logging.INFO)
     solarman = PySolarmanV5(
-        solarman_address, solarman_loggerserial, port=solarman_port, mb_slave_id=slave_id, verbose=verbose, auto_reconnect=True, logger=logger
+        address, loggerserial, port=port, mb_slave_id=slave_id, verbose=verbose, auto_reconnect=True, logger=logger
     )
     with ModbusProxyServer((server_address, server_port), ModbusProxyHandler, solarman) as server:
         try:
