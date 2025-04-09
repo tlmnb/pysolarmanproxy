@@ -52,13 +52,13 @@ class ModbusProxyServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
 
 @click.command()
-@click.option("--server_address", required=True, type=str)
-@click.option("--server_port", required=True, type=int)
-@click.option("--address", required=True, type=str)
-@click.option("--port", required=True, type=int)
-@click.option("--loggerserial", required=True, type=int)
-@click.option("--slave_id", required=True, type=int)
-@click.option("--verbose", is_flag=True, default=False, type=bool)
+@click.option("--server_address", required=True, type=str, help="The IP address of the proxy server (e.g., 127.0.0.1).")
+@click.option("--server_port", required=True, type=int, help="The port number of the proxy server (e.g., 5020).")
+@click.option("--address", required=True, type=str, help="The IP address of the Solarman device.")
+@click.option("--port", required=True, type=int, help="The port number of the Solarman device (e.g., 8899).")
+@click.option("--loggerserial", required=True, type=int, help="The logger serial number of the Solarman device.")
+@click.option("--slave_id", required=True, type=int, help="The Modbus slave ID of the Solarman device. Usually set to 1.")  
+@click.option("--verbose", is_flag=True, default=False, type=bool, help="Enable verbose logging for debugging.")
 def run(
     server_address: str,
     server_port: int,
