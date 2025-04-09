@@ -1,5 +1,6 @@
 import logging
 import socketserver
+import threading
 from typing import Any, Tuple
 
 import click
@@ -8,6 +9,7 @@ from pysolarmanv5 import PySolarmanV5
 logging.basicConfig()
 logger = logging.getLogger("pysolarmanproxy")
 
+lock = threading.Lock()
 
 class ModbusProxyHandler(socketserver.StreamRequestHandler):
 
@@ -16,13 +18,20 @@ class ModbusProxyHandler(socketserver.StreamRequestHandler):
 
     def handle(self) -> None:
         logger.debug(f"client connected: {self.client_address[0]}:{self.client_address[1]}")
-        request: bytes = self.request.recv(1024)
-        logger.debug("request: {data}".format(data=" ".join(f"{byte:02X}" for byte in request)))
-        response = self.server.solarman.send_raw_modbus_frame(request)
-        self.wfile.write(response)
+        while True:
+            request: bytes = self.request.recv(1024)
+            if not request:
+                break
+            logger.debug("request: {data}".format(data=" ".join(f"{byte:02X}" for byte in request)))
+            try:
+                lock.acquire()
+                response = self.server.solarman.send_raw_modbus_frame(request)
+            finally:
+                lock.release()
+            self.wfile.write(response)
 
 
-class ModbusProxyServer(socketserver.TCPServer):
+class ModbusProxyServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
     def __init__(
         self,
